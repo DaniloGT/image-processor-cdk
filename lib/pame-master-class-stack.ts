@@ -62,7 +62,7 @@ export default class PameMasterClassStack extends Stack {
       environment: {
         BUCKET_NAME: InvokerBucket.bucketName,
       },
-      handler: 'index.uploader-handler',
+      handler: 'index.uploade_handler',
       runtime: Runtime.PYTHON_3_9,
     });
 
