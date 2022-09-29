@@ -1,9 +1,11 @@
 import json
+import PIL
+
 
 def processor_handler(event, context):
   # Procesar imagen y subir a bucket/done
   print('hola de nuevo')
-  
+  print(PIL.__version__)
   response = {
     "statusCode": str(200),
     "body": json.dumps(f'Hello from lambda'),
