@@ -10,16 +10,25 @@ La primera versión de la infraestructura constará de solo dos recursos, un api
 
 El api gateway nos brindará una URL para invocar a nuestro editor de imagenes.
 
-La lambda, será nuestra capa de computo, acá es donde editaremos la imagen y la dejaremos lista para ser devuelta a un usuario
+La lambda, será nuestra capa de computo, acá es donde editaremos la imagen y la dejaremos lista para ser devuelta a un usuario por la misma API
 
+## ¿Como levanto esta infraestructura?
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Primero, siempre puedes saber si tu infraestructura esta bien ejecutando `cdk synth`
+Al ejecutar ese comando, se generará un archivo en la carpeta cdk.out con los recursos de tu stack.
 
-## Useful commands
+Si no tienes problemas con el paso anterior entonces estas listo para desplegar tu infraestructura!!
+Para eso ejecuta `cdk deploy` 
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
+## La infraestructura (Version 2.0)
+
+Como no queremos mantener todo el proceso de backend junto, vamos a dividir un poco más la infraestructura y así delegar responsabilidades.
+(divide and conquer)
+La infraestructura 2.0 queda así:
+* Un API para recibir requests
+* Una lambda que recibe aquella request y guarda la imagen en un bucket
+* Un bucket para guardar imagenes
+* Una topico SNS que es notificado si hay un archivo nuevo en un bucket
+* Una lambda que modifica la imagen
+* Una lambda que envia la imagen al cliente final
+
