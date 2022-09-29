@@ -14,7 +14,9 @@ import {
 import { Construct } from 'constructs';
 import {
   Code,
-  Function, Runtime,
+  Function,
+  LayerVersion,
+  Runtime,
 } from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
 import {
@@ -81,12 +83,18 @@ export default class PameMasterClassStack extends Stack {
     uploadPath.addMethod('POST', new LambdaIntegration(LambdaUploader));
 
     // Processor lambda, sns and s3 trigger
+    const RequirementsLayer = new LayerVersion(this, 'LambdaLayer', {
+      code: Code.fromAsset(path.join(__dirname, 'lambda-processor-layer/')),
+      compatibleRuntimes: [Runtime.PYTHON_3_9],
+    });
+
     const LambdaProcessor = new Function(this, 'LambdaProcessor', {
       code: Code.fromAsset(path.join(__dirname, 'lambda-processor')),
       environment: {
         BUCKET_NAME: InvokerBucket.bucketName,
       },
-      handler: 'index.processor-handler',
+      handler: 'index.processor_handler',
+      layers: [RequirementsLayer],
       runtime: Runtime.PYTHON_3_9,
     });
 

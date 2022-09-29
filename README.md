@@ -31,4 +31,3 @@ La infraestructura 2.0 queda así:
 * Una topico SNS que es notificado si hay un archivo nuevo en un bucket
 * Una lambda que modifica la imagen
 * Una lambda que envia la imagen al cliente final
-
