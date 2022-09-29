@@ -1,0 +1,71 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "es6": true
+  },
+  "globals": {
+    "jest/globals": true
+  },
+  "extends": [
+    "airbnb-base",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended"
+  ],
+  "plugins": ["jest", "@typescript-eslint"],
+  "rules": {
+    "object-shorthand": "error",
+    "space-before-blocks": "error",
+    "keyword-spacing": ["error", { "before": true }],
+    "max-len": ["error", { "code": 100 }],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": ["const", "let", "var"],"next": "*"},
+      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
+      { "blankLine": "always", "prev": "*", "next": "return" }
+    ],
+    "object-curly-newline": [
+      "error", {
+        "ObjectPattern": {"multiline": true,"minProperties": 3, "consistent": true},
+        "ImportDeclaration": {"multiline": true, "minProperties": 2, "consistent": true}
+      }
+    ],
+    "prefer-template": "error",
+    "sort-imports": ["error", {
+      "ignoreCase": false,
+      "ignoreDeclarationSort": true,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+      "allowSeparatedGroups": false
+  }],
+    "semi": ["error", "always"],
+    "function-call-argument-newline": ["error", "consistent"],
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "semi",
+        "requireLast": true
+      }
+      }],
+    "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "no-new": 0,
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
+    "no-warning-comments": "warn",
+    "jest/expect-expect": ["off", { "assertFunctionNames": ["expect", "expectCDK"] }]
+  }
+}
