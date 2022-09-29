@@ -13,9 +13,10 @@ import {
 } from 'aws-cdk-lib/aws-s3-notifications';
 import { Construct } from 'constructs';
 import {
-  Architecture,
   Code,
-  Function, LayerVersion, Runtime,
+  Function,
+  LayerVersion,
+  Runtime,
 } from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
 import {
