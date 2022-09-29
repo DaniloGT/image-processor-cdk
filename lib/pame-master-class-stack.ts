@@ -8,7 +8,9 @@ import {
   BucketEncryption,
   EventType,
 } from 'aws-cdk-lib/aws-s3';
-import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
+import {
+  SnsDestination,
+} from 'aws-cdk-lib/aws-s3-notifications';
 import { Construct } from 'constructs';
 import {
   Code,
@@ -22,6 +24,8 @@ import {
 import {
   Effect, PolicyStatement,
 } from 'aws-cdk-lib/aws-iam';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { SnsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 
 export default class PameMasterClassStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -35,6 +39,17 @@ export default class PameMasterClassStack extends Stack {
       enforceSSL: true,
       versioned: true,
     });
+
+    // SNS
+    const SnsBucket = new Topic(this, 'SnsBucketTrigger', {
+      topicName: 'sns-bucket-topic',
+    });
+
+    InvokerBucket.addEventNotification(
+      EventType.OBJECT_CREATED_PUT,
+      new SnsDestination(SnsBucket),
+      { prefix: 'raw/*' },
+    );
 
     // Api
     const api = new RestApi(this, 's3-uploader-api', {
@@ -65,7 +80,7 @@ export default class PameMasterClassStack extends Stack {
 
     uploadPath.addMethod('POST', new LambdaIntegration(LambdaUploader));
 
-    // Processor lambda and s3 trigger
+    // Processor lambda, sns and s3 trigger
     const LambdaProcessor = new Function(this, 'LambdaProcessor', {
       code: Code.fromAsset(path.join(__dirname, 'lambda-processor')),
       environment: {
@@ -75,11 +90,7 @@ export default class PameMasterClassStack extends Stack {
       runtime: Runtime.PYTHON_3_9,
     });
 
-    InvokerBucket.addEventNotification(
-      EventType.OBJECT_CREATED,
-      new LambdaDestination(LambdaProcessor),
-      { prefix: 'raw/*' },
-    );
+    LambdaProcessor.addEventSource(new SnsEventSource(SnsBucket));
 
     LambdaProcessor.addToRolePolicy(new PolicyStatement({
       actions: [
