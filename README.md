@@ -1,6 +1,17 @@
-# Welcome to your CDK TypeScript project
+# Editor de imagenes [Proyecto CDK]
 
-This is a blank project for CDK development with TypeScript.
+La idea de este proyecto es construir un editor de imagenes usando CDK para levantar la infraestructura en AWS.
+
+La idea es que nuestros clientes puedan llamar a un endpoint de una API, con su imagen y nosotros retornamos la imagen editada
+
+## La infraestructura (Version 1.0)
+
+La primera versión de la infraestructura constará de solo dos recursos, un api gateway y una lambda.
+
+El api gateway nos brindará una URL para invocar a nuestro editor de imagenes.
+
+La lambda, será nuestra capa de computo, acá es donde editaremos la imagen y la dejaremos lista para ser devuelta a un usuario
+
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
