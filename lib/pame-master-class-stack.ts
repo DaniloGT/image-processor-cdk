@@ -55,6 +55,7 @@ export default class PameMasterClassStack extends Stack {
 
     // Api
     const api = new RestApi(this, 's3-uploader-api', {
+      binaryMediaTypes: ['*/*'],
       restApiName: 'S3 uploader api',
     });
 
@@ -83,7 +84,7 @@ export default class PameMasterClassStack extends Stack {
 
     uploadPath.addMethod('POST', new LambdaIntegration(LambdaUploader));
 
-    // Processor lambda, sns and s3 trigger
+    // Processor lambda, sns trigger
     const RequirementsLayer = new LayerVersion(this, 'LambdaLayer', {
       code: Code.fromAsset(path.join(__dirname, 'lambda-processor-layer/')),
       compatibleRuntimes: [Runtime.PYTHON_3_9],
