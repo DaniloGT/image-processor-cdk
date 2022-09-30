@@ -64,6 +64,7 @@ export default class PameMasterClassStack extends Stack {
       environment: {
         BUCKET_NAME: InvokerBucket.bucketName,
       },
+      functionName: 'Lambda-image-uploader',
       handler: 'index.uploader_handler',
       runtime: Runtime.PYTHON_3_9,
     });
@@ -93,6 +94,7 @@ export default class PameMasterClassStack extends Stack {
       environment: {
         BUCKET_NAME: InvokerBucket.bucketName,
       },
+      functionName: 'Lambda-image-processor',
       handler: 'index.processor_handler',
       layers: [RequirementsLayer],
       runtime: Runtime.PYTHON_3_9,
