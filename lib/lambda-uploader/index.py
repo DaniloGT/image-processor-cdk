@@ -24,7 +24,7 @@ def uploader_handler(event, context):
   response = {
     "statusCode": str(200),
     "body": json.dumps({
-      "message": "Your image was correctly upload and we will send you and email to download your new image",
+      "message": "Your image was correctly uploaded",
       "url": "wena/pagina"
     }),
     "headers": {
