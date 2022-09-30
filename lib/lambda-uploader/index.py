@@ -41,14 +41,7 @@ def uploader_handler(event, context):
       "body": json.dumps({
         "message": "Your image was correctly uploaded",
         "url": f"{download_url}?fileName={file_name}",
-      }),
-      "headers": {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT",
-        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-        "X-Requested-With": "*",
-      },
+      })
     }
 
   except Exception as e:
