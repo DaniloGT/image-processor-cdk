@@ -29,7 +29,7 @@ def processor_handler(event, context):
   )
 
   # Edit image
-  old_image = PIL.Image.open(obj)
+  old_image = PIL.Image.open(obj["Body"])
   new_image = old_image.transpose(PIL.Image.Transpose.FLIP_LEFT_RIGHT).convert("1")
 
   in_mem_file = BytesIO()
