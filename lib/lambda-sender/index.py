@@ -1,7 +1,24 @@
 import json
+import boto3
 
 def processor_handler(event, context):
   '''Send image to user'''
+
+  image_name = event["queryStringParameters"]["image_name"]
+  bucket_name = 'image-processor-bucket-veryuniquename'
+
+  try:
+    # Get image from s3
+    s3_client = boto3.client('s3')
+    response = s3_client.generate_presigned_url('get_object',
+                                                Params={'Bucket': bucket_name,
+                                                        'Key': image_name},
+                                                ExpiresIn=3600)
+    print(response)
+    text_to_response = 'Here is your image:'
+  except:
+    text_to_response = 'Your image is still being processed. Try again later.'
+
 
   response = {
     "statusCode": str(200),

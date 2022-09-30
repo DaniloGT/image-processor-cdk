@@ -33,7 +33,7 @@ export default class PameMasterClassStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // Bucket
+    // Bucket to store unprocessed images
     const InvokerBucket = new Bucket(this, 'invokerBucket', {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       bucketName: 'image-processor-bucket-veryuniquename',
