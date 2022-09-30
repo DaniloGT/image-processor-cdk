@@ -1,11 +1,15 @@
 import json
 
 def uploader_handler(event, context):
-  # Subir imagen a bucket/raw desde b64
+  """
+  This image upload the image to the bucket
+  """
+  # Store uploaded image in bucket
+  # s3.upload_file(file_name, bucket, edited_image)
 
   response = {
     "statusCode": str(200),
-    "body": json.dumps(f'Hello from lambda'),
+    "body": json.dumps(f'Your image was correctly upload and we will send you and email to download your new image'),
     "headers": {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": '*',

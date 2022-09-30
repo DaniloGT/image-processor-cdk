@@ -1,9 +1,13 @@
 import json
 import PIL
+import boto3
 
 
 def processor_handler(event, context):
-  # Procesar imagen y subir a bucket/done
+  '''
+  This function read the image from the bucket, edit the image, and
+  then upload the image to another bucket
+  '''
   print('hola de nuevo')
   print(PIL.__version__)
 
@@ -17,6 +21,15 @@ def processor_handler(event, context):
 
   print(f's3_event_key: {s3_event_key}')
   print(f's3_bucket: {s3_bucket}')
+
+  # Read image from s3
+  s3 = boto3.client("s3")
+  obj = s3.get_object(Bucket=s3_bucket, Key=s3_event_key)
+
+  # Edit image
+
+  # Store edited image in bucket
+  # s3.upload_file(file_name, bucket, edited_image)
 
   response = {
     "statusCode": str(200),
