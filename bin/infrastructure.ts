@@ -5,6 +5,9 @@ import ApiEditImages from '../lib/stack';
 
 const app = new cdk.App();
 
+// Value of apiKey
+const mySuperApiKeyValue = app.node.tryGetContext('apiKeyValue');
+
 new ApiEditImages(app, 'ApiEditImagesStack', {
-  mySuperApiKeyValue: 'holi',
+  mySuperApiKeyValue,
 });
