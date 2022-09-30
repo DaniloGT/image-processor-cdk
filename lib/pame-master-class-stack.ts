@@ -48,9 +48,9 @@ export default class PameMasterClassStack extends Stack {
     });
 
     InvokerBucket.addEventNotification(
-      EventType.OBJECT_CREATED_PUT,
+      EventType.OBJECT_CREATED,
       new SnsDestination(SnsBucket),
-      { prefix: 'raw/*' },
+      { prefix: 'raw/' },
     );
 
     // Api
@@ -105,7 +105,7 @@ export default class PameMasterClassStack extends Stack {
 
     LambdaProcessor.addToRolePolicy(new PolicyStatement({
       actions: [
-        's3:ReadObject',
+        's3:GetObject',
       ],
       effect: Effect.ALLOW,
       resources: [
