@@ -1,22 +1,32 @@
+import base64
+import boto3
 import json
 import os
-import boto3
+import uuid
 
 def uploader_handler(event, context):
-  # Subir imagen a bucket/raw desde b64
+  """
+  This image upload the image to the bucket
+  """
 
-  s3 = boto3.resource("s3")
-
+  image_name = str(uuid.uuid4())
+  s3 = boto3.client("s3")
   bucket_name = os.environ['BUCKET_NAME']
 
-  s3_path = 'raw/file.txt'
-  event_p = json.dumps(event)
+  b_file = base64.b64decode(event["body"])
 
-  s3.Bucket(bucket_name).put_object(Key=s3_path, Body=event_p.encode('utf-8'))
+  s3.put_object(
+    Bucket = bucket_name,
+    Key = image_name,
+    Body=b_file
+  )
 
   response = {
     "statusCode": str(200),
-    "body": json.dumps(f'File saved'),
+    "body": json.dumps({
+      "message": "Your image was correctly upload and we will send you and email to download your new image",
+      "url": "wena/pagina"
+    }),
     "headers": {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": '*',
