@@ -8,7 +8,7 @@ def uploader_handler(event, context):
   """
   This image upload the image to the bucket
   """
-  if "image" not in event["headers"]["Content-Type"]:
+  if "Content-Type" not in event["headers"] or "image" not in event["headers"]["Content-Type"]:
     response = {
       "statusCode": str(400),
       "body": json.dumps({
@@ -23,6 +23,11 @@ def uploader_handler(event, context):
     content_type = event["headers"]["Content-Type"].split("/")[-1]
     file_name = f"{image_name}.{content_type}"
 
+    url = event["requestContext"]["domainName"]
+    stage = event["requestContext"]["stage"]
+
+    download_url = f"https://{url}/{stage}/download"
+
     s3 = boto3.client("s3")
 
     s3.put_object(
@@ -35,7 +40,7 @@ def uploader_handler(event, context):
       "statusCode": str(200),
       "body": json.dumps({
         "message": "Your image was correctly uploaded",
-        "url": f"wena/pagina/{file_name}",
+        "url": f"{download_url}?fileName={file_name}",
       }),
       "headers": {
         "Content-Type": "application/json",

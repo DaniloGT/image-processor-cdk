@@ -122,5 +122,30 @@ export default class PameMasterClassStack extends Stack {
         `${InvokerBucket.bucketArn}/done/*`,
       ],
     }));
+
+    // Sender Lambda
+    const LambdaSender = new Function(this, 'LambdaSender', {
+      code: Code.fromAsset(path.join(__dirname, 'lambda-sender')),
+      environment: {
+        BUCKET_NAME: InvokerBucket.bucketName,
+      },
+      functionName: 'Lambda-image-sender',
+      handler: 'index.sender_handler',
+      runtime: Runtime.PYTHON_3_9,
+    });
+
+    const downloadPath = api.root.addResource('download');
+
+    downloadPath.addMethod('GET', new LambdaIntegration(LambdaSender));
+
+    LambdaSender.addToRolePolicy(new PolicyStatement({
+      actions: [
+        's3:GetObject',
+      ],
+      effect: Effect.ALLOW,
+      resources: [
+        `${InvokerBucket.bucketArn}/done/*`,
+      ],
+    }));
   }
 }
