@@ -16,6 +16,8 @@ def uploader_handler(event, context):
       })
     }
 
+    return response
+
   try:
     image_name = str(uuid.uuid4())
     content_type = event["headers"]["Content-Type"].split("/")[-1]
