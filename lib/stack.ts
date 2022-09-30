@@ -21,8 +21,10 @@ import {
 } from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
 import {
+  ApiKey,
   LambdaIntegration,
   RestApi,
+  UsagePlan,
 } from 'aws-cdk-lib/aws-apigateway';
 import {
   Effect, PolicyStatement,
@@ -30,8 +32,14 @@ import {
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { SnsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 
-export default class PameMasterClassStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+interface ApiEditImagesProps extends StackProps {
+  readonly mySuperApiKeyValue: string;
+}
+
+export default class ApiEditImages extends Stack {
+  constructor(scope: Construct, id: string, props: ApiEditImagesProps) {
+    const { mySuperApiKeyValue } = props;
+
     super(scope, id, props);
 
     // Bucket to store unprocessed images
@@ -59,6 +67,30 @@ export default class PameMasterClassStack extends Stack {
       binaryMediaTypes: ['*/*'],
       restApiName: 'S3 uploader api',
     });
+
+    // Create api key
+    const apiKey = new ApiKey(scope,
+      'ApiKey',
+      {
+        apiKeyName: 'MySuperApiKey',
+        value: mySuperApiKeyValue,
+      });
+
+    // Creates usages plan
+    const usagePlan = new UsagePlan(scope,
+      'ApiUsagePlan',
+      {
+        apiStages: [
+          {
+            api,
+            stage: api.deploymentStage,
+          },
+        ],
+        name: 'ApiUsagePlan',
+      });
+
+    // Attach api key to usage plan
+    usagePlan.addApiKey(apiKey);
 
     // Lambda uploader and api trigger
     const LambdaUploader = new Function(this, 'LambdaUploader', {
