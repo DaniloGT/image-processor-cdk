@@ -1,20 +1,11 @@
 import json
-import uuid
 
-
-def uploader_handler(event, context):
-  """
-  This image upload the image to the bucket
-  """
-
-  image_name = str(uuid.uuid4())
-
-  # Store uploaded image in bucket
-  # s3.upload_file(image_name, bucket, edited_image)
+def processor_handler(event, context):
+  '''Send image to user'''
 
   response = {
     "statusCode": str(200),
-    "body": json.dumps(f'Your image was correctly upload and we will send you and email to download your new image'),
+    "body": json.dumps(f'Hello from lambda'),
     "headers": {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": '*',
