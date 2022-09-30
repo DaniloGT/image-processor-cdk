@@ -55,6 +55,7 @@ export default class PameMasterClassStack extends Stack {
 
     // Api
     const api = new RestApi(this, 's3-uploader-api', {
+      binaryMediaTypes: ['*/*'],
       restApiName: 'S3 uploader api',
     });
 
