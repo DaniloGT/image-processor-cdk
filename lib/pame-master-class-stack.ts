@@ -1,4 +1,5 @@
 import {
+  Duration,
   Stack,
   StackProps,
 } from 'aws-cdk-lib';
@@ -99,6 +100,7 @@ export default class PameMasterClassStack extends Stack {
       handler: 'index.processor_handler',
       layers: [RequirementsLayer],
       runtime: Runtime.PYTHON_3_9,
+      timeout: Duration.seconds(60),
     });
 
     LambdaProcessor.addEventSource(new SnsEventSource(SnsBucket));
