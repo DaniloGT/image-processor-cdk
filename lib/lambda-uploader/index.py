@@ -1,11 +1,16 @@
 import json
+import uuid
+
 
 def uploader_handler(event, context):
   """
   This image upload the image to the bucket
   """
+
+  image_name = str(uuid.uuid4())
+
   # Store uploaded image in bucket
-  # s3.upload_file(file_name, bucket, edited_image)
+  # s3.upload_file(image_name, bucket, edited_image)
 
   response = {
     "statusCode": str(200),
