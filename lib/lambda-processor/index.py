@@ -1,5 +1,5 @@
 from io import BytesIO
-import PIL
+from PIL import Image
 import json
 import boto3
 
@@ -29,8 +29,8 @@ def processor_handler(event, context):
   )
 
   # Edit image
-  old_image = PIL.Image.open(obj["Body"])
-  new_image = old_image.transpose(PIL.Image.Transpose.FLIP_LEFT_RIGHT).convert("1")
+  old_image = Image.open(obj["Body"])
+  new_image = old_image.transpose(Image.Transpose.FLIP_LEFT_RIGHT).convert("1")
 
   in_mem_file = BytesIO()
   new_image.save(in_mem_file, format = old_image.format)
