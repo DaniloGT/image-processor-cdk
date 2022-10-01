@@ -115,7 +115,11 @@ export default class ApiEditImages extends Stack {
 
     const uploadPath = api.root.addResource('upload');
 
-    uploadPath.addMethod('POST', new LambdaIntegration(LambdaUploader));
+    uploadPath.addMethod(
+      'POST',
+      new LambdaIntegration(LambdaUploader),
+      { apiKeyRequired: true },
+    );
 
     // Processor lambda, sns trigger
     const RequirementsLayer = new LayerVersion(this, 'LambdaLayer', {
@@ -170,7 +174,11 @@ export default class ApiEditImages extends Stack {
 
     const downloadPath = api.root.addResource('download');
 
-    downloadPath.addMethod('GET', new LambdaIntegration(LambdaSender));
+    downloadPath.addMethod(
+      'GET',
+      new LambdaIntegration(LambdaSender),
+      { apiKeyRequired: true },
+    );
 
     LambdaSender.addToRolePolicy(new PolicyStatement({
       actions: [
