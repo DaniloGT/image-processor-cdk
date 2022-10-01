@@ -69,7 +69,7 @@ export default class ApiEditImages extends Stack {
     });
 
     // Create api key
-    const apiKey = new ApiKey(scope,
+    const apiKey = new ApiKey(this,
       'ApiKey',
       {
         apiKeyName: 'MySuperApiKey',
@@ -77,7 +77,7 @@ export default class ApiEditImages extends Stack {
       });
 
     // Creates usages plan
-    const usagePlan = new UsagePlan(scope,
+    const usagePlan = new UsagePlan(this,
       'ApiUsagePlan',
       {
         apiStages: [
