@@ -27,7 +27,8 @@ import {
   UsagePlan,
 } from 'aws-cdk-lib/aws-apigateway';
 import {
-  Effect, PolicyStatement,
+  Effect,
+  PolicyStatement,
 } from 'aws-cdk-lib/aws-iam';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { SnsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
@@ -56,6 +57,7 @@ export default class ApiEditImages extends Stack {
       topicName: 'sns-bucket-topic',
     });
 
+    // Notify SNS if object is created
     InvokerBucket.addEventNotification(
       EventType.OBJECT_CREATED,
       new SnsDestination(SnsBucket),
@@ -69,30 +71,26 @@ export default class ApiEditImages extends Stack {
     });
 
     // Create api key
-    const apiKey = new ApiKey(this,
-      'ApiKey',
-      {
-        apiKeyName: 'MySuperApiKey',
-        value: mySuperApiKeyValue,
-      });
+    const apiKey = new ApiKey(this, 'ApiKey', {
+      apiKeyName: 'MySuperApiKey',
+      value: mySuperApiKeyValue,
+    });
 
-    // Creates usages plan
-    const usagePlan = new UsagePlan(this,
-      'ApiUsagePlan',
-      {
-        apiStages: [
-          {
-            api,
-            stage: api.deploymentStage,
-          },
-        ],
-        name: 'ApiUsagePlan',
-      });
+    // Creates usage plan
+    const usagePlan = new UsagePlan(this, 'ApiUsagePlan', {
+      apiStages: [
+        {
+          api,
+          stage: api.deploymentStage,
+        },
+      ],
+      name: 'ApiUsagePlan',
+    });
 
     // Attach api key to usage plan
     usagePlan.addApiKey(apiKey);
 
-    // Lambda uploader and api trigger
+    // Lambda uploader
     const LambdaUploader = new Function(this, 'LambdaUploader', {
       code: Code.fromAsset(path.join(__dirname, 'lambda-uploader')),
       environment: {
@@ -103,6 +101,7 @@ export default class ApiEditImages extends Stack {
       runtime: Runtime.PYTHON_3_9,
     });
 
+    // Least privilege roles
     LambdaUploader.addToRolePolicy(new PolicyStatement({
       actions: [
         's3:PutObject',
@@ -113,6 +112,7 @@ export default class ApiEditImages extends Stack {
       ],
     }));
 
+    // Add api trigger
     const uploadPath = api.root.addResource('upload');
 
     uploadPath.addMethod(
@@ -121,12 +121,13 @@ export default class ApiEditImages extends Stack {
       { apiKeyRequired: true },
     );
 
-    // Processor lambda, sns trigger
+    // Processor lambda layer
     const RequirementsLayer = new LayerVersion(this, 'LambdaLayer', {
       code: Code.fromAsset(path.join(__dirname, 'lambda-processor-layer/')),
       compatibleRuntimes: [Runtime.PYTHON_3_9],
     });
 
+    // Processor lambda
     const LambdaProcessor = new Function(this, 'LambdaProcessor', {
       code: Code.fromAsset(path.join(__dirname, 'lambda-processor')),
       environment: {
@@ -139,8 +140,10 @@ export default class ApiEditImages extends Stack {
       timeout: Duration.seconds(60),
     });
 
+    // SNS lambda trigger
     LambdaProcessor.addEventSource(new SnsEventSource(SnsBucket));
 
+    // Least privilege roles
     LambdaProcessor.addToRolePolicy(new PolicyStatement({
       actions: [
         's3:GetObject',
@@ -172,6 +175,7 @@ export default class ApiEditImages extends Stack {
       runtime: Runtime.PYTHON_3_9,
     });
 
+    // Add api trigger
     const downloadPath = api.root.addResource('download');
 
     downloadPath.addMethod(
@@ -180,6 +184,7 @@ export default class ApiEditImages extends Stack {
       { apiKeyRequired: true },
     );
 
+    // Least privilege roles
     LambdaSender.addToRolePolicy(new PolicyStatement({
       actions: [
         's3:GetObject',
