@@ -18,7 +18,7 @@ Primero, siempre puedes saber si tu infraestructura esta bien ejecutando `cdk sy
 Al ejecutar ese comando, se generará un archivo en la carpeta cdk.out con los recursos de tu stack.
 
 Si no tienes problemas con el paso anterior entonces estas listo para desplegar tu infraestructura!!
-Para eso ejecuta `cdk deploy` 
+Para eso ejecuta `cdk deploy`
 
 ## La infraestructura (Version 2.0)
 
@@ -31,3 +31,17 @@ La infraestructura 2.0 queda así:
 * Una topico SNS que es notificado si hay un archivo nuevo en un bucket
 * Una lambda que modifica la imagen
 * Una lambda que envia la imagen al cliente final
+
+### Layer
+
+Para crear la layer deben tener Docker instalado y luego:
+* `cd lib`
+* `sh layer.sh` o `layer.cmd` según el sistema operativo
+
+### Deploy y síntesis
+
+Para utilizar este repo se requiere tener node instalado y luego:
+* `npm install` para instalar las librerías necesarias
+* `cdk diff` para ver los cambios con el stack ya creado
+* `cdk synth` para ver el stack creado en formato cloudformation
+* `cdk deploy` para hacer deploy del stack
