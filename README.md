@@ -45,3 +45,8 @@ Para utilizar este repo se requiere tener node instalado y luego:
 * `cdk diff` para ver los cambios con el stack ya creado
 * `cdk synth` para ver el stack creado en formato cloudformation
 * `cdk deploy` para hacer deploy del stack
+
+### Dudas!
+
+Cualquier duda pueden contactarme por correo a `dev.dgonzalez@gmail.com`
+
