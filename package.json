@@ -1,6 +1,6 @@
 {
   "name": "pame-master-class",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "bin": {
     "pame-master-class": "bin/pame-master-class.js"
   },
